@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mediplus</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Custom styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            /* White background for the whole website */
+            text-align: center;
+        }
+
+        .header-bar,
+        .footer {
+            background-color: rgba(255, 255, 255, 0.8);
+            /* Translucent background */
+            padding: 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .logo img {
+            height: 50px;
+        }
+
+        /* Navbar Styles */
+        .navigation-bar {
+            background-color: #004d00;
+            /* Dark Green (60%) */
+            color: #FFFFFF;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 20;
+            /* Ensures the navigation bar is on top of other elements */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav {
+            display: flex;
+            flex-grow: 1;
+            justify-content: center;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .nav-item {
+            margin: 0 15px;
+        }
+
+        .navigation-bar .d-flex.align-items-center {
+            display: flex;
+            align-items: center;
+        }
+
+        .medplus-logo {
+            height: 40px;
+            /* Adjust the size of the logo as needed */
+            margin-right: 10px;
+            /* Space between the logo and title */
+        }
+
+        .medplus-title {
+            font-size: 24px;
+            /* Adjust the font size as needed */
+            font-weight: bold;
+            color: #f2f2f2;
+            /* Adjust the color as needed */
+        }
+
+        .nav-link {
+            color: #FFFFFF;
+            /* White links */
+            text-decoration: none;
+            padding: 10px 15px;
+            font-size: 1rem;
+        }
+
+        .nav-link:hover {
+            background-color: #66BB6A;
+            /* Light Green (30%) */
+            color: #FFFFFF;
+            border-radius: 10px;
+        }
+
+        /* Styling the burger menu icon */
+        .burger-menu {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 20px;
+            cursor: pointer;
+            z-index: 20;
+            /* Ensure burger menu is above other elements */
+        }
+
+        .burger-menu div {
+            width: 100%;
+            height: 3px;
+            background-color: #FFFFFF;
+        }
+
+        /* Display nav links and hide burger menu on larger screens */
+        @media (min-width: 768px) {
+            .nav {
+                display: flex;
+                flex-direction: row;
+            }
+
+            .burger-menu {
+                display: none;
+            }
+
+            .nav-links {
+                display: flex;
+                flex-direction: row;
+            }
+
+            .appointment-button {
+                border-radius: 10px;
+                background-color: darkorange;
+            }
+        }
+
+        /* Show the burger menu and hide the nav items on small screens */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+                background-color: #ffffff;
+                /* Set background color */
+                position: absolute;
+                top: 60px;
+                /* Adjust based on your header height */
+                left: 0;
+                z-index: 15;
+                /* Ensure it is above other elements */
+            }
+
+            .burger-menu {
+                display: flex;
+                /* Show burger menu */
+            }
+
+            .nav-links.active {
+                display: flex;
+                /* Show nav items when active */
+            }
+
+            .nav-item {
+                margin: 15px 0;
+            }
+
+            .appointment-button {
+                display: none;
+                /* Hide the button in mobile view */
+            }
+        }
+
+        /* Show nav links when burger menu is clicked (toggle class with JS) */
+        .nav-links.active {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 60px;
+            /* Adjust based on your header height */
+            left: 0;
+            width: 100%;
+            background-color: rgba(0, 77, 0, 0.9);
+            /* Slightly darker green */
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 15;
+        }
+
+        .nav-links.active .nav {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .nav-links.active .appointment-button {
+            margin-top: 10px;
+            width: 100%;
+            background-color: #2c6b2f;
+            border-radius: 10px;
+        }
+
+        /* Container Styles */
+        .container {
+            max-width: 1200px;
+            /* Increase max-width for a larger container */
+            margin: 0 auto;
+            padding: 40px 20px;
+            /* Add more padding for space around content */
+            box-sizing: border-box;
+        }
+
+        /* General Text Styles */
+        body {
+            line-height: 1.6;
+            /* Increase line-height for better readability */
+            font-size: 1.1rem;
+            /* Slightly larger font size */
+            color: #333;
+            background-color: #f9f9f9;
+        }
+
+        /* Section Headers */
+        .section-header {
+            font-size: 2.5rem;
+            /* Larger section headers */
+            margin-bottom: 2rem;
+            color: #004d00;
+            /* Dark Green (60%) */
+        }
+
+        /* About Section */
+        .about-wrapper {
+            background-color: #ffffff;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .about-description h2 {
+            font-size: 2.5rem;
+            /* Larger heading */
+            margin-top: 20px;
+            margin-bottom: 20px;
+            color: #004d00;
+            /* Dark Green */
+        }
+
+        .about-description p {
+            font-size: 1.2rem;
+            /* Slightly larger font */
+            line-height: 1.8;
+            /* Increased line-height for better readability */
+            color: #555;
+            /* Softer text color */
+            margin-top: 20px;
+            /* Space between title and content */
+        }
+
+        /* Who We Are Section */
+        .who-we-are-wrapper {
+            background-color: #e8f5e9;
+            padding: 20px;
+            /* Increased padding */
+            text-align: center;
+        }
+
+        .who-we-are-description p {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #555;
+            margin-top: 20px;
+            /* Space between title and content */
+        }
+
+        /* Service Cards */
+        .service-card {
+            max-width: 400px;
+            /* Slightly larger cards */
+            margin: 20px auto;
+            /* More margin for spacing between cards */
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .service-card h3 {
+            font-size: 2rem;
+            /* Larger service titles */
+            color: #004d00;
+        }
+
+        .service-card p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 60px 20px;
+            /* Increase padding */
+            text-align: center;
+        }
+
+        .footer h4 {
+            font-size: 1.5rem;
+            /* Increase footer heading size */
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .footer p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #e6e6e6;
+        }
+
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        #home {
+            position: relative;
+            overflow: hidden;
+            height: 500px;
+            /* Adjust height as needed */
+        }
+
+        .carousel-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .carousel-slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transition: opacity 1s ease;
+            opacity: 0;
+            animation: fade 1s ease-in-out;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .carousel-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #fff;
+        }
+
+        .carousel-content h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .carousel-content p {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .carousel-button {
+            background-color: #004d00;
+            /* Dark Green (60%) */
+            color: #fff;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            margin: 0.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .carousel-button:hover {
+            background-color: #66BB6A;
+            /* Light Green (30%) */
+        }
+
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+        }
+
+        .carousel-prev,
+        .carousel-next {
+            background-color: transparent;
+            color: #fff;
+            border: none;
+            padding: 1rem;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .carousel-pause,
+        .carousel-play {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            display: none;
+            border: none;
+            padding: 1rem;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .carousel-prev {
+            left: 10px;
+        }
+
+        .carousel-next {
+            right: 10px;
+        }
+
+        .carousel-pause {
+            left: 50px;
+            /* Adjust as needed */
+        }
+
+        .carousel-play {
+            right: 50px;
+            /* Adjust as needed */
+        }
+
+        .carousel-prev:hover,
+        .carousel-next:hover,
+        .carousel-pause:hover,
+        .carousel-play:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+            transform: scale(1.1);
+        }
+
+        @keyframes fade {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .section-header {
+            text-align: center;
+            margin: 3rem 0;
+            color: #004d00;
+            /* Dark Green (60%) */
+        }
+
+        .services-container .section-header {
+            margin-bottom: 2rem;
+        }
+
+        .service-card {
+            background-color: rgba(255, 255, 255, 0.9);
+            /* Translucent white */
+            border-radius: 10px;
+            padding: 1rem;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin: auto;
+            max-width: 350px;
+            box-sizing: border-box;
+        }
+
+        .service-card h3 {
+            margin-top: 0;
+            font-size: 1.75rem;
+            color: #004d00;
+            /* Dark Green (60%) */
+        }
+
+        .service-card p {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 40px;
+        }
+
+        .service-card .more-info-button {
+            background-color: #007bff;
+            /* Blue color (10%) */
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 1rem;
+            display: inline-block;
+        }
+
+        .stats-wrapper {
+            background-color: rgba(240, 248, 255, 0.8);
+            /* Light translucent blue */
+            padding: 2rem 0;
+            margin-top: 40px;
+        }
+
+        .testimonials-wrapper {
+            background-color: rgba(240, 248, 255, 0.8);
+            /* Light translucent blue */
+            padding: 2rem 0;
+        }
+
+        .testimonial-item {
+            padding: 1.5rem;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.9);
+            /* Translucent white */
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            margin: 0 auto;
+            max-width: 700px;
+        }
+
+        .testimonial-item p {
+            font-size: 1.2rem;
+            color: #555;
+        }
+
+        .testimonial-item h3 {
+            margin: 1rem 0;
+            color: #004d00;
+            /* Dark Green (60%) */
+        }
+
+        .rating {
+            color: #FFD700;
+            /* Gold color for stars */
+        }
+
+        .carousel-control-prev,
+        .carousel-control-next {
+            filter: invert(1);
+            /* Optional: for better visibility on light backgrounds */
+        }
+
+        .stat-item {
+            text-align: center;
+            color: #004d00;
+            /* Dark Green (60%) */
+            margin: 1rem 0;
+        }
+
+        .stat-item i {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-item h2 {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .stat-item p {
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .about-us {
+            background-color: #f5f5f5;
+            /* Light grey background for contrast */
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .about-us h2 {
+            font-size: 2.5rem;
+            color: #004d00;
+            /* Dark green for headings */
+            margin-bottom: 20px;
+        }
+
+        .about-us p {
+            font-size: 1.2rem;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto 40px auto;
+            line-height: 1.6;
+        }
+
+        .about-us .mission-vision {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .about-us .mission-vision .mission,
+        .about-us .mission-vision .vision {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .about-us .mission-vision .mission:hover,
+        .about-us .mission-vision .vision:hover {
+            transform: translateY(-5px);
+        }
+
+        .about-us .mission-vision h3 {
+            font-size: 2rem;
+            color: #004d00;
+            margin-bottom: 15px;
+        }
+
+        .about-us .mission-vision p {
+            font-size: 1.1rem;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .who-we-are {
+            background-color: #e8f5e9;
+            /* Light green background for thematic consistency */
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+
+        .who-we-are h2 {
+            font-size: 2.5rem;
+            color: #004d00;
+            margin-bottom: 20px;
+        }
+
+        .who-we-are p {
+            font-size: 1.2rem;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto 10px auto;
+            line-height: 1.6;
+        }
+
+        .who-we-are .team {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .who-we-are .team-member {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 300px;
+            transition: transform 0.3s;
+        }
+
+        .who-we-are .team-member:hover {
+            transform: translateY(-5px);
+        }
+
+        .who-we-are .team-member img {
+            width: 100%;
+            border-radius: 50%;
+            margin-bottom: 20px;
+        }
+
+        .who-we-are .team-member h3 {
+            font-size: 1.5rem;
+            color: #004d00;
+            margin-bottom: 10px;
+        }
+
+        .who-we-are .team-member p {
+            font-size: 1rem;
+            color: #555;
+            line-height: 1.4;
+        }
+
+
+
+        .video-play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #004d00;
+            /* Dark Green (60%) */
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .footer {
+            background-color: #004d00;
+            /* Dark Green (60%) */
+            color: #fff;
+            padding: 40px 0;
+        }
+
+        .footer h4 {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .footer p {
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .footer .social-icons a {
+            color: #fff;
+            font-size: 18px;
+            margin-right: 15px;
+        }
+
+        .footer .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer .footer-links a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer .footer-links a:hover {
+            color: #e6e6e6;
+        }
+
+        .footer .newsletter {
+            display: flex;
+            flex-direction: column;
+            align-items: flex
+        }
+
+        .treatment-pricing-wrapper {
+            padding: 60px 0;
+            background-color: #f4f4f4;
+        }
+
+        .treatment-pricing-wrapper h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+
+        .treatment-cards {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            /* Allows cards to wrap to a new line on smaller screens */
+            justify-content: center;
+            /* Centers the cards horizontally */
+        }
+
+        .card {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            /* Semi-transparent white background for glass effect */
+            backdrop-filter: blur(10px);
+            /* Glass-like blur effect */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            /* Slightly stronger shadow */
+            flex: 1 1 calc(33.333% - 60px);
+            /* Ensures cards take up 1/3 of the row minus gap */
+            max-width: calc(33.333% - 60px);
+            /* Sets maximum width to 1/3 of the row */
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            /* Optional: light border for better definition */
+        }
+
+        .card h2 {
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+            color: #2c6b2f;
+            /* Dark green for headings */
+        }
+
+        .card .price {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #2c6b2f;
+            /* Dark green for price */
+        }
+
+        .card .per-visit {
+            font-size: 1rem;
+            color: #777;
+        }
+
+        .card .features {
+            margin-top: 20px;
+        }
+
+        .card .features ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .card .features li {
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card .features li span {
+            font-size: 1rem;
+            color: #333;
+        }
+
+        .card .features li i {
+            font-size: 1.2rem;
+            color: #2c6b2f;
+            /* Dark green for check icons */
+        }
+
+        .card .features li i.cross {
+            color: #f44336;
+            /* Red for cross icons */
+        }
+
+        .card button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #2c6b2f;
+            /* Dark green for button */
+            color: #fff;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .card button:hover {
+            background-color: #1f4d1f;
+            /* Slightly darker green for hover effect */
+        }
+
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .card {
+                flex: 1 1 100%;
+                /* Full width on smaller screens */
+                max-width: 100%;
+                /* Full width on smaller screens */
+            }
+        }
+
+        .appointment-section {
+            padding: 60px 0;
+            background-color: rgba(94, 251, 175, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .appointment-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .appointment-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .appointment-text h2 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .appointment-text p {
+            font-size: 1rem;
+            color: #777;
+            margin-bottom: 40px;
+        }
+
+        .appointment-form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .appointment-form .form-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .appointment-form input,
+        .appointment-form select,
+        .appointment-form textarea {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .appointment-form textarea {
+            resize: none;
+            height: 100px;
+        }
+
+        .appointment-form button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .appointment-form button:hover {
+            background-color: #0056b3;
+        }
+
+        .appointment-form .confirmation-text {
+            font-size: 0.9rem;
+            color: #777;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .appointment-form .form-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        .about-image {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            box-sizing: border-box;
+        }
+
+        .about-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .who-we-are-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .who-we-are-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+
+        <nav class="navigation-bar">
+            <div class="container">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <img src="logo.webp" alt="Medplus Logo" class="medplus-logo">
+                        <span class="medplus-title">Medplus</span>
+                    </div>
+                    <ul class="nav nav-links">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#home">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#services">Services</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#about">About Us</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#testimonials">Testimonials</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#contact">Contact</a>
+                        </li>
+                    </ul>
+                    <button class="appointment-button">Book Appointment</button>
+                    <div class="burger-menu" onclick="toggleNav()">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+    </header>
+
+    <section id="home">
+        <div class="carousel-wrapper">
+            <div class="carousel-slide">
+                <img src="img1.jpeg" alt="Doctor holding medical records">
+            </div>
+            <div class="carousel-slide">
+                <img src="2.jpg" alt="Health care professionals">
+            </div>
+            <div class="carousel-slide">
+                <img src="img5.png" alt="Doctor using digital tablet">
+            </div>
+            <div class="carousel-slide">
+                <img src="4.jpg" alt="Doctor discussing medical records">
+            </div>
+            <div class="carousel-content">
+                <h1>Welcome to Mediplus</h1>
+                <p>Providing Quality Healthcare for Everyone</p>
+                <button class="carousel-button book-now">Book Now</button>
+                <button class="carousel-button more-info">More Info</button>
+            </div>
+            <button class="carousel-nav carousel-prev">&lt;</button>
+            <button class="carousel-nav carousel-next">&gt;</button>
+            <button class="carousel-nav carousel-pause">Pause</button>
+            <button class="carousel-nav carousel-play">Play</button>
+        </div>
+    </section>
+
+    <section id="services">
+        <div class="container">
+            <h2 class="section-header">Our Services</h2>
+            <div class="row">
+                <div class="col-lg-4 col-md-6">
+                    <div class="service-card">
+                        <h3>Cardiology</h3>
+                        <p>Expert care for heart conditions.</p>
+                        <a href="#" class="more-info-button">More Info</a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="service-card">
+                        <h3>Neurology</h3>
+                        <p>Advanced treatment for neurological disorders.</p>
+                        <a href="#" class="more-info-button">More Info</a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="service-card">
+                        <h3>Pediatrics</h3>
+                        <p>Comprehensive care for children.</p>
+                        <a href="#" class="more-info-button">More Info</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="stats" class="stats-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 stat-item">
+                    <i class="fas fa-users"></i>
+                    <h2>1200+</h2>
+                    <p>Happy Patients</p>
+                </div>
+                <div class="col-md-3 stat-item">
+                    <i class="fas fa-stethoscope"></i>
+                    <h2>50+</h2>
+                    <p>Specialties</p>
+                </div>
+                <div class="col-md-3 stat-item">
+                    <i class="fas fa-medkit"></i>
+                    <h2>100+</h2>
+                    <p>Doctors</p>
+                </div>
+                <div class="col-md-3 stat-item">
+                    <i class="fas fa-calendar-check"></i>
+                    <h2>5000+</h2>
+                    <p>Appointments</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- About Us Section -->
+    <section id="about" class="about-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 about-description">
+                    <h2>About Us</h2>
+                    <p>Mediplus is committed to providing top-notch healthcare services to our community. Our team of
+                        highly skilled professionals is dedicated to delivering exceptional care in a compassionate and
+                        friendly environment.</p>
+                </div>
+                <div class="col-md-6 about-image">
+                    <img src="4.jpg" alt="About Mediplus">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Who We Are Section -->
+    <div id="who-we-are" class="who-we-are-wrapper">
+        <div class="container">
+            <h2 class="text-center">Who We Are</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="who-we-are-description">
+                        <p>We are a dedicated team of healthcare professionals committed to providing high-quality
+                            medical care with compassion and expertise. Our mission is to improve the well-being of our
+                            patients through innovative treatments and a patient-centered approach.</p>
+                        <p>With a focus on advanced technology and personalized care, we strive to meet the unique needs
+                            of each individual we serve. Our experienced staff is here to support you every step of the
+                            way, ensuring you receive the best possible care.</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="who-we-are-image">
+                        <img src="img1.jpeg" alt="Who We Are">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section id="treatment-pricing" class="treatment-pricing-wrapper">
+        <div class="container">
+            <h1>We Provide You The Best Treatment<br>In Reasonable Price</h1>
+            <div class="treatment-cards">
+                <div class="card">
+                    <i class="fas fa-scissors"></i>
+                    <h2>Plastic Surgery</h2>
+                    <div class="price">$199</div>
+                    <div class="per-visit">Per Visit</div>
+                    <div class="features">
+                        <ul>
+                            <li><span>Lorem Ipsum Dolor Sit</span><i class="fas fa-check"></i></li>
+                            <li><span>Cubitur Sollicitudin Fentum</span><i class="fas fa-check"></i></li>
+                            <li><span>Nullam Interdum Enim</span><i class="fas fa-times cross"></i></li>
+                            <li><span>Donec Ultricies Metus</span><i class="fas fa-times cross"></i></li>
+                            <li><span>Pellentesque Eget Nibh</span><i class="fas fa-times cross"></i></li>
+                        </ul>
+                    </div>
+                    <button>Book Now</button>
+                </div>
+                <div class="card">
+                    <i class="fas fa-tooth"></i>
+                    <h2>Teeth Whitening</h2>
+                    <div class="price">$299</div>
+                    <div class="per-visit">Per Visit</div>
+                    <div class="features">
+                        <ul>
+                            <li><span>Lorem Ipsum Dolor Sit</span><i class="fas fa-check"></i></li>
+                            <li><span>Cubitur Sollicitudin Fentum</span><i class="fas fa-check"></i></li>
+                            <li><span>Nullam Interdum Enim</span><i class="fas fa-check"></i></li>
+                            <li><span>Donec Ultricies Metus</span><i class="fas fa-times cross"></i></li>
+                            <li><span>Pellentesque Eget Nibh</span><i class="fas fa-times cross"></i></li>
+                        </ul>
+                    </div>
+                    <button>Book Now</button>
+                </div>
+                <div class="card">
+                    <i class="fas fa-heart"></i>
+                    <h2>Heart Surgery</h2>
+                    <div class="price">$399</div>
+                    <div class="per-visit">Per Visit</div>
+                    <div class="features">
+                        <ul>
+                            <li><span>Lorem Ipsum Dolor Sit</span><i class="fas fa-check"></i></li>
+                            <li><span>Cubitur Sollicitudin Fentum</span><i class="fas fa-check"></i></li>
+                            <li><span>Nullam Interdum Enim</span><i class="fas fa-check"></i></li>
+                            <li><span>Donec Ultricies Metus</span><i class="fas fa-check"></i></li>
+                            <li><span>Pellentesque Eget Nibh</span><i class="fas fa-check"></i></li>
+                        </ul>
+                    </div>
+                    <button>Book Now</button>
+                </div>
+            </div>
+        </div>
+        <script src="https://kit.fontawesome.com/your-font-awesome-kit-id.js" crossorigin="anonymous"></script>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="testimonials-wrapper">
+        <div class="container">
+            <h2 class="section-header">What Our Patients Say</h2>
+            <div id="testimonialCarousel" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="testimonial-item">
+                            <p>"The care I received at Mediplus was outstanding. The staff was friendly and
+                                professional, and I felt very well taken care of."</p>
+                            <h3>Jane Doe</h3>
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="testimonial-item">
+                            <p>"I am grateful for the excellent treatment and support provided by Mediplus. They went
+                                above and beyond to ensure my recovery."</p>
+                            <h3>John Smith</h3>
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Add more testimonials here -->
+                </div>
+                <a class="carousel-control-prev" href="#testimonialCarousel" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#testimonialCarousel" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="appointment-section">
+        <div class="appointment-container">
+            <div class="appointment-content">
+                <div class="appointment-text">
+                    <h2>We Are Always Ready To Help You. Book An Appointment</h2>
+                    <p>Lorem ipsum dolor sit amet consectetur adipiscing elit praesent aliquet, pretium.</p>
+                </div>
+                <form class="appointment-form">
+                    <div class="form-row">
+                        <input type="text" placeholder="Name" required>
+                        <input type="email" placeholder="Email" required>
+                    </div>
+                    <div class="form-row">
+                        <input type="tel" placeholder="Phone" required>
+                        <select required>
+                            <option value="">Department</option>
+                            <!-- Add department options here -->
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <select required>
+                            <option value="">Doctor</option>
+                            <!-- Add doctor options here -->
+                        </select>
+                        <input type="date" required>
+                    </div>
+                    <div class="form-row">
+                        <textarea placeholder="Write Your Message Here....."></textarea>
+                    </div>
+                    <button type="submit">Book An Appointment</button>
+                    <p class="confirmation-text">(We will be confirmed by a Text Message)</p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h4>About Mediplus</h4>
+                    <p>Mediplus is dedicated to delivering high-quality medical services with a patient-centered
+                        approach. Our experienced team is here to provide compassionate care for all your healthcare
+                        needs.</p>
+                </div>
+                <div class="col-md-4">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#testimonials">Testimonials</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h4>Contact Us</h4>
+                    <p>123 Health St, Wellness City, HC 12345</p>
+                    <p>Email: info@mediplus.com</p>
+                    <p>Phone: (123) 456-7890</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                    <div class="newsletter">
+                        <input type="email" placeholder="Subscribe to our newsletter">
+                        <button>Subscribe</button>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Mediplus. All rights reserved. <a href="#">Privacy Policy</a> | <a href="#">Terms of
+                        Service</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.prev-slide').click(function () {
+                // Logic for previous slide
+            });
+            $('.next-slide').click(function () {
+                // Logic for next slide
+            });
+        });
+        document.addEventListener('DOMContentLoaded', function () {
+            const slides = document.querySelectorAll('.carousel-slide');
+            let currentSlide = 0;
+            let interval;
+
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    slide.style.opacity = i === index ? '1' : '0';
+                });
+            }
+
+            function nextSlide() {
+                currentSlide = (currentSlide + 1) % slides.length;
+                showSlide(currentSlide);
+            }
+
+            function prevSlide() {
+                currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+                showSlide(currentSlide);
+            }
+
+            function startAutoSlide() {
+                interval = setInterval(nextSlide, 3000); // Change slide every 3 seconds
+            }
+
+            function stopAutoSlide() {
+                clearInterval(interval);
+            }
+
+            document.querySelector('.carousel-next').addEventListener('click', nextSlide);
+            document.querySelector('.carousel-prev').addEventListener('click', prevSlide);
+            document.querySelector('.carousel-pause').addEventListener('click', stopAutoSlide);
+            document.querySelector('.carousel-play').addEventListener('click', startAutoSlide);
+
+            showSlide(currentSlide); // Initialize carousel
+            startAutoSlide(); // Start auto sliding
+        });
+        document.querySelector('.burger-menu').addEventListener('click', function () {
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+        function toggleNav() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.classList.toggle('active');
+        }
+
+        // Optional: Close the menu when clicking outside of it
+        document.addEventListener('click', function (event) {
+            const navLinks = document.querySelector('.nav-links');
+            const burgerMenu = document.querySelector('.burger-menu');
+            if (!navLinks.contains(event.target) && !burgerMenu.contains(event.target)) {
+                navLinks.classList.remove('active');
+            }
+        });
+
+
+
+    </script>
+</body>
+
+</html>
